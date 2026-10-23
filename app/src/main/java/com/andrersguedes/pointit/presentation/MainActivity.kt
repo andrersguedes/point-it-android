@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,8 +16,6 @@ import com.andrersguedes.pointit.presentation.home.HomeViewModel
 import com.andrersguedes.pointit.presentation.theme.PointItTheme
 
 class MainActivity : ComponentActivity() {
-
-    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Instala a API oficial de Splash Screen antes do super.onCreate
@@ -38,15 +38,20 @@ class MainActivity : ComponentActivity() {
                 ) {
                     // Rota 1: Tela Inicial (Home)
                     composable("home_screen") {
+                        val viewModel: HomeViewModel = viewModel()
+                        val state by viewModel.uiState.collectAsState()
+
                         HomeScreen(
-                            viewModel = homeViewModel,
-                            onNavigateToRoom = { userName, taskTitle ->
-                                // Aqui faremos a navegação para a Tela 2 no futuro
-                                // Ex: navController.navigate("room_screen/$userName/$taskTitle")
+                            state = state,
+                            onUserNameChanged = viewModel::onUserNameChanged,
+                            onTaskTitleChanged = viewModel::onTaskTitleChanged,
+                            onSubmit = {
+                                viewModel.validateAndProceed { name, task ->
+                                    navController.navigate("room_screen/$name/$task")
+                                }
                             },
                             onNavigateToHistory = {
-                                // Aqui faremos a navegação para a Tela de Histórico
-                                // Ex: navController.navigate("history_screen")
+                                navController.navigate("history_screen")
                             }
                         )
                     }
