@@ -8,7 +8,9 @@ appcompat = "1.8.0"
 material = "1.14.0"
 uiGraphics = "1.12.1"
 material3 = "1.4.0"
-kotlin = "2.1.20"
+kotlin = "2.4.21"
+coreSplashScreen = "1.2.0"
+compose = "1.13.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -19,6 +21,8 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashScreen" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "compose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

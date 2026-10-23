@@ -34,10 +34,12 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
