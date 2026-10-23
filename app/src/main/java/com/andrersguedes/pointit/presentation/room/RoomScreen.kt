@@ -120,25 +120,25 @@ fun RoomScreen(
                             areVotesRevealed = state.areVotesRevealed
                         )
                     }
+                }
+            }
 
-                    if (state.areVotesRevealed && state.averageScore != null) {
-                        Spacer(modifier = Modifier.height(Spacing.medium))
-                        Card(
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer
-                            ),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = stringResource(R.string.room_screen_text_average_score, state.averageScore),
-                                modifier = Modifier.padding(Spacing.medium),
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
+            if (state.areVotesRevealed && state.averageScore != null) {
+                Spacer(modifier = Modifier.height(Spacing.medium))
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(R.string.room_screen_text_average_score, state.averageScore),
+                        modifier = Modifier.padding(Spacing.medium),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
 
@@ -157,7 +157,7 @@ fun RoomScreen(
                     columns = GridCells.Fixed(4),
                     horizontalArrangement = Arrangement.spacedBy(Spacing.small),
                     verticalArrangement = Arrangement.spacedBy(Spacing.small),
-                    modifier = Modifier.height(140.dp)
+                    modifier = Modifier.height(100.dp)
                 ) {
                     items(fibonacciCards) { cardValue ->
                         FibonacciCardItem(
