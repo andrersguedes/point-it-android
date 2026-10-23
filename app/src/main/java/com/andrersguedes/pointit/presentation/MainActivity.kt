@@ -3,6 +3,7 @@ package com.andrersguedes.pointit.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
@@ -19,6 +20,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Instala a API oficial de Splash Screen antes do super.onCreate
         installSplashScreen()
+
+        // Ativa o modo de tela cheia edge-to-edge nativo
+        enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
 
