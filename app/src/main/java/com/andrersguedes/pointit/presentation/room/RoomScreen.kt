@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.HourglassEmpty
@@ -52,6 +54,9 @@ fun RoomScreen(
     onResetVoting: () -> Unit,
     onBackClick: () -> Unit
 ) {
+    // Cria o estado de scroll
+    val scrollState = rememberScrollState()
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -60,6 +65,7 @@ fun RoomScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.systemBars)
+                .verticalScroll(scrollState)
                 .padding(Spacing.large),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
