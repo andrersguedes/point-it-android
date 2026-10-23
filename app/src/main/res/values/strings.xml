@@ -7,4 +7,13 @@
     <string name="home_screen_button_text">Criar Sala de Votação</string>
     <string name="home_screen_history_button_text">Ver Histórico de Estimativas</string>
     <string name="home_screen_error_message">Por favor, preencha seu nome e o título da task.</string>
+
+    <string name="room_screen_active_room_user_name">Sala ativa • Participante: %s</string>
+    <string name="room_screen_text_table">Mesa de Votação</string>
+    <string name="room_screen_text_average_score">Média de Estimativa: %.1f</string>
+    <string name="room_screen_text_choose_card">Escolha sua carta:</string>
+    <string name="room_screen_button_reveal_votes">Revelar Votos</string>
+    <string name="room_screen_button_reset_voting">Nova Votação (Resetar)</string>
+    <string name="room_screen_text_voted">✓ Votou</string>
+    <string name="room_screen_text_thinking">Pensando…</string>
 </resources>

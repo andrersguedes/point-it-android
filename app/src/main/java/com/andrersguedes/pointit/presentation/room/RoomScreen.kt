@@ -33,10 +33,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.andrersguedes.pointit.R
 import com.andrersguedes.pointit.presentation.theme.PointItTheme
 import com.andrersguedes.pointit.presentation.theme.Spacing
 
@@ -75,7 +77,8 @@ fun RoomScreen(
                 )
                 Spacer(modifier = Modifier.height(Spacing.extraSmall))
                 Text(
-                    text = "Sala ativa • Participante: ${state.userName}",
+                    text = stringResource(
+                        R.string.room_screen_active_room_user_name, state.userName),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -100,7 +103,7 @@ fun RoomScreen(
                     verticalArrangement = Arrangement.spacedBy(Spacing.small)
                 ) {
                     Text(
-                        text = "Mesa de Votação",
+                        text = stringResource(R.string.room_screen_text_table),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -121,7 +124,7 @@ fun RoomScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = "Média de Estimativa: %.1f".format(state.averageScore),
+                                text = stringResource(R.string.room_screen_text_average_score, state.averageScore),
                                 modifier = Modifier.padding(Spacing.medium),
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.Bold,
@@ -138,7 +141,7 @@ fun RoomScreen(
             // Deck de Cartas de Fibonacci
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "Escolha sua carta:",
+                    text = stringResource(R.string.room_screen_text_choose_card),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -175,7 +178,7 @@ fun RoomScreen(
                             .height(50.dp),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text(text = "Revelar Votos", fontWeight = FontWeight.Bold)
+                        Text(text = stringResource(R.string.room_screen_button_reveal_votes), fontWeight = FontWeight.Bold)
                     }
                 } else {
                     Button(
@@ -186,7 +189,7 @@ fun RoomScreen(
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                     ) {
-                        Text(text = "Nova Votação (Resetar)", fontWeight = FontWeight.Bold)
+                        Text(text = stringResource(R.string.room_screen_button_reset_voting), fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -215,8 +218,8 @@ fun ParticipantRow(participant: Participant, areVotesRevealed: Boolean) {
 
         val displayVote = when {
             areVotesRevealed -> participant.selectedVote ?: "-"
-            participant.hasVoted -> "✓ Votou"
-            else -> "Pensando..."
+            participant.hasVoted -> stringResource(R.string.room_screen_text_voted)
+            else -> stringResource(R.string.room_screen_text_thinking)
         }
 
         Text(
