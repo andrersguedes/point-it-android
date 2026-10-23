@@ -35,9 +35,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.andrersguedes.pointit.R
 import com.andrersguedes.pointit.presentation.theme.PointItTheme
+import com.andrersguedes.pointit.presentation.theme.Spacing
 
 @Composable
 fun HomeScreen(
@@ -59,7 +59,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.systemBars)
                 .verticalScroll(scrollState)
-                .padding(24.dp),
+                .padding(Spacing.large),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -70,7 +70,7 @@ fun HomeScreen(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(Spacing.small))
             Text(
                 text = stringResource(R.string.home_screen_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
@@ -78,20 +78,20 @@ fun HomeScreen(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(Spacing.xxl))
 
             // Card container para os inputs
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(Spacing.medium),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = Spacing.xxs)
             ) {
                 Column(
-                    modifier = Modifier.padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    modifier = Modifier.padding(Spacing.large),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.medium)
                 ) {
                     // Campo: Nome do Usuário
                     OutlinedTextField(
@@ -103,7 +103,7 @@ fun HomeScreen(
                         },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(Spacing.medium)
                     )
 
                     // Campo: Título da Tarefa
@@ -116,7 +116,7 @@ fun HomeScreen(
                         },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(Spacing.medium)
                     )
 
                     // Exibição de Erro caso exista
@@ -131,7 +131,7 @@ fun HomeScreen(
                         null -> { /* Sem erro */ }
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(Spacing.small))
 
                     // Botão Principal: Criar / Entrar na Sala
                     Button(
@@ -142,8 +142,8 @@ fun HomeScreen(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(50.dp),
-                        shape = RoundedCornerShape(12.dp)
+                            .height(Spacing.xxl),
+                        shape = RoundedCornerShape(Spacing.medium)
                     ) {
                         Text(
                             text = stringResource(R.string.home_screen_button_text),
@@ -154,7 +154,7 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(Spacing.large))
 
             // Botão Secundário: Histórico
             TextButton(onClick = onNavigateToHistory) {
