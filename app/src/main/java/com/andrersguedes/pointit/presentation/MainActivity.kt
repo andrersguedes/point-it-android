@@ -4,15 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.andrersguedes.pointit.presentation.home.HomeScreen
 import com.andrersguedes.pointit.presentation.home.HomeViewModel
+import com.andrersguedes.pointit.presentation.room.RoomScreen
+import com.andrersguedes.pointit.presentation.room.RoomViewModel
 import com.andrersguedes.pointit.presentation.theme.PointItTheme
 
 class MainActivity : ComponentActivity() {
@@ -54,6 +59,41 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate("history_screen")
                             }
                         )
+                    }
+
+                    // Rota 2: Mesa de Votação (Planning Poker)
+                    composable(
+                        route = "room_screen/{userName}/{taskTitle}",
+                        arguments = listOf(
+                            navArgument("userName") { type = NavType.StringType },
+                            navArgument("taskTitle") { type = NavType.StringType }
+                        )
+                    ) { backStackEntry ->
+                        val userName = backStackEntry.arguments?.getString("userName") ?: ""
+                        val taskTitle = backStackEntry.arguments?.getString("taskTitle") ?: ""
+
+                        val roomViewModel: RoomViewModel = viewModel()
+                        val state by roomViewModel.uiState.collectAsState()
+
+                        // Inicializa a sessão assim que entra na tela
+                        LaunchedEffect(userName, taskTitle) {
+                            roomViewModel.initSession(userName, taskTitle)
+                        }
+
+                        RoomScreen(
+                            state = state,
+                            onVoteSelected = roomViewModel::selectVote,
+                            onRevealVotes = roomViewModel::revealVotes,
+                            onResetVoting = roomViewModel::resetVoting,
+                            onBackClick = {
+                                navController.popBackStack()
+                            }
+                        )
+                    }
+
+                    // Rota 3: Histórico de Estimativas
+                    composable("history_screen") {
+                        // Conteúdo da tela de histórico
                     }
                 }
             }
