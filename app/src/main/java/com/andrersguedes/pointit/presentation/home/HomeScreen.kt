@@ -31,10 +31,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.andrersguedes.pointit.R
 import com.andrersguedes.pointit.presentation.theme.PointItTheme
 
 @Composable
@@ -63,14 +65,14 @@ fun HomeScreen(
         ) {
             // Logo / Cabeçalho
             Text(
-                text = "Point It",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Planejamento de sprints ágeis sem atritos",
+                text = stringResource(R.string.home_screen_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -95,7 +97,7 @@ fun HomeScreen(
                     OutlinedTextField(
                         value = state.userName,
                         onValueChange = { viewModel.onUserNameChanged(it) },
-                        label = { Text("Seu Nome") },
+                        label = { Text(stringResource(R.string.home_screen_text_your_name)) },
                         leadingIcon = {
                             Icon(imageVector = Icons.Default.Person, contentDescription = null)
                         },
@@ -108,7 +110,7 @@ fun HomeScreen(
                     OutlinedTextField(
                         value = state.taskTitle,
                         onValueChange = { viewModel.onTaskTitleChanged(it) },
-                        label = { Text("História / Task (Ex: [PROJ-102])") },
+                        label = { Text(stringResource(R.string.home_screen_text_your_task)) },
                         leadingIcon = {
                             Icon(imageVector = Icons.Default.Task, contentDescription = null)
                         },
@@ -118,12 +120,15 @@ fun HomeScreen(
                     )
 
                     // Exibição de Erro caso exista
-                    if (state.errorMessage != null) {
-                        Text(
-                            text = state.errorMessage!!,
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodySmall
-                        )
+                    when (state.errorType) {
+                        HomeError.EMPTY_FIELDS -> {
+                            Text(
+                                text = stringResource(R.string.home_screen_error_message),
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                        null -> { /* Sem erro */ }
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -141,7 +146,7 @@ fun HomeScreen(
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(
-                            text = "Criar Sala de Votação",
+                            text = stringResource(R.string.home_screen_button_text),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold
                         )
@@ -154,7 +159,7 @@ fun HomeScreen(
             // Botão Secundário: Histórico
             TextButton(onClick = onNavigateToHistory) {
                 Text(
-                    text = "Ver Histórico de Estimativas",
+                    text = stringResource(R.string.home_screen_history_button_text),
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
