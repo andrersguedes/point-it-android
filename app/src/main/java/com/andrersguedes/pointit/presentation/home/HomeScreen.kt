@@ -120,15 +120,12 @@ fun HomeScreen(
                     )
 
                     // Exibição de Erro caso exista
-                    when (state.errorType) {
-                        HomeError.EMPTY_FIELDS -> {
-                            Text(
-                                text = stringResource(R.string.home_screen_error_message),
-                                color = MaterialTheme.colorScheme.error,
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        }
-                        null -> { /* Sem erro */ }
+                    if (state.errorType == HomeError.EMPTY_FIELDS) {
+                        Text(
+                            text = stringResource(R.string.home_screen_error_message),
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(Spacing.small))
