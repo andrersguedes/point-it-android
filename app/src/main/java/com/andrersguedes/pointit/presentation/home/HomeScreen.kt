@@ -1,6 +1,5 @@
 package com.andrersguedes.pointit.presentation.home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,8 +26,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -41,12 +38,12 @@ import com.andrersguedes.pointit.presentation.theme.Spacing
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel,
-    onNavigateToRoom: (userName: String, taskTitle: String) -> Unit,
+    state: HomeUiState,
+    onUserNameChanged: (String) -> Unit,
+    onTaskTitleChanged: (String) -> Unit,
+    onSubmit: () -> Unit,
     onNavigateToHistory: () -> Unit
 ) {
-    val state by viewModel.uiState.collectAsState()
-
     // Cria o estado de scroll
     val scrollState = rememberScrollState()
 
@@ -96,7 +93,7 @@ fun HomeScreen(
                     // Campo: Nome do Usuário
                     OutlinedTextField(
                         value = state.userName,
-                        onValueChange = { viewModel.onUserNameChanged(it) },
+                        onValueChange = onUserNameChanged,
                         label = { Text(stringResource(R.string.home_screen_text_your_name)) },
                         leadingIcon = {
                             Icon(imageVector = Icons.Default.Person, contentDescription = null)
@@ -109,7 +106,7 @@ fun HomeScreen(
                     // Campo: Título da Tarefa
                     OutlinedTextField(
                         value = state.taskTitle,
-                        onValueChange = { viewModel.onTaskTitleChanged(it) },
+                        onValueChange = onTaskTitleChanged,
                         label = { Text(stringResource(R.string.home_screen_text_your_task)) },
                         leadingIcon = {
                             Icon(imageVector = Icons.Default.Task, contentDescription = null)
@@ -132,11 +129,7 @@ fun HomeScreen(
 
                     // Botão Principal: Criar / Entrar na Sala
                     Button(
-                        onClick = {
-                            viewModel.validateAndProceed { name, task ->
-                                onNavigateToRoom(name, task)
-                            }
-                        },
+                        onClick = onSubmit,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(Spacing.xxl),
@@ -165,16 +158,17 @@ fun HomeScreen(
     }
 }
 
-@SuppressLint("ViewModelConstructorInComposable")
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun HomeScreenPreview() {
     PointItTheme {
         HomeScreen(
-            viewModel = HomeViewModel(),
-            onNavigateToRoom = { _, _ -> },
-            onNavigateToHistory = { }
+            state = HomeUiState(),
+            onUserNameChanged = {},
+            onTaskTitleChanged = {},
+            onSubmit = {},
+            onNavigateToHistory = {}
         )
     }
 }
