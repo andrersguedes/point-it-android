@@ -31,10 +31,10 @@ class RoomViewModel : ViewModel() {
         // Simulando a entrada do usuário e alguns membros na sala para demonstração ágil
         val initialParticipants = listOf(
             Participant(id = "1", name = userName, selectedVote = null, hasVoted = false),
-            Participant(id = "2", name = "Ana Tech Lead", selectedVote = "5", hasVoted = true),
-            Participant(id = "3", name = "Lucas Dev", selectedVote = "8", hasVoted = true),
-            Participant(id = "4", name = "Thiago Dev", selectedVote = "5", hasVoted = true),
-            Participant(id = "5", name = "Clara Dev", selectedVote = "3", hasVoted = true)
+            Participant(id = "2", name = "Ana - Tech Lead", selectedVote = "5", hasVoted = true),
+            Participant(id = "3", name = "Lucas - Dev", selectedVote = "8", hasVoted = true),
+            Participant(id = "4", name = "Thiago - Dev", selectedVote = "3", hasVoted = true),
+            Participant(id = "5", name = "Clara - Dev", selectedVote = "5", hasVoted = true)
         )
 
         _uiState.update {
