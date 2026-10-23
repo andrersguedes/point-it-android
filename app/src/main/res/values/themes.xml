@@ -1,4 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.PointIt" parent="Theme.MaterialComponents.DayNight.DarkActionBar" />
+
+    <!-- Tema da Splash Screen -->
+    <style name="Theme.PointIt.Splash" parent="Theme.SplashScreen">
+        <!-- Cor de fundo da Splash (combinando com o app) -->
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <!-- Ícone que aparecerá no centro da tela -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <!-- Tema para onde o app vai após o carregamento -->
+        <item name="postSplashScreenTheme">@style/Theme.PointIt</item>
+    </style>
 </resources>
