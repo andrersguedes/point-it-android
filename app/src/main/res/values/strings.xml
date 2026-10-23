@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Point It</string>
+
+    <string name="home_screen_subtitle">Planejamento de sprints ágeis sem atritos</string>
+    <string name="home_screen_text_your_name">Seu Nome</string>
+    <string name="home_screen_text_your_task">História / Task (Ex: [PROJ-102])</string>
+    <string name="home_screen_button_text">Criar Sala de Votação</string>
+    <string name="home_screen_history_button_text">Ver Histórico de Estimativas</string>
+    <string name="home_screen_error_message">Por favor, preencha seu nome e o título da task.</string>
 </resources>
