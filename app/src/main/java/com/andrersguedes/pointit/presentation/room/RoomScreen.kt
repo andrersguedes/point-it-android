@@ -91,7 +91,7 @@ fun RoomScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(Spacing.medium),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                 )
@@ -175,8 +175,8 @@ fun RoomScreen(
                         onClick = onRevealVotes,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(50.dp),
-                        shape = RoundedCornerShape(12.dp)
+                            .height(Spacing.xxl),
+                        shape = RoundedCornerShape(Spacing.medium)
                     ) {
                         Text(text = stringResource(R.string.room_screen_button_reveal_votes), fontWeight = FontWeight.Bold)
                     }
@@ -185,8 +185,8 @@ fun RoomScreen(
                         onClick = onResetVoting,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(50.dp),
-                        shape = RoundedCornerShape(12.dp),
+                            .height(Spacing.xxl),
+                        shape = RoundedCornerShape(Spacing.medium),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                     ) {
                         Text(text = stringResource(R.string.room_screen_button_reset_voting), fontWeight = FontWeight.Bold)
@@ -202,7 +202,7 @@ fun ParticipantRow(participant: Participant, areVotesRevealed: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(Spacing.small))
             .padding(Spacing.small),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -238,12 +238,12 @@ fun FibonacciCardItem(value: String, isSelected: Boolean, onClick: () -> Unit) {
 
     Surface(
         modifier = Modifier
-            .height(60.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .height(Spacing.xxl)
+            .clip(RoundedCornerShape(Spacing.medium))
             .clickable(onClick = onClick),
         color = backgroundColor,
-        shadowElevation = if (isSelected) 6.dp else 2.dp,
-        shape = RoundedCornerShape(12.dp)
+        shadowElevation = if (isSelected) Spacing.small else Spacing.xxs,
+        shape = RoundedCornerShape(Spacing.medium)
     ) {
         Box(
             contentAlignment = Alignment.Center,
