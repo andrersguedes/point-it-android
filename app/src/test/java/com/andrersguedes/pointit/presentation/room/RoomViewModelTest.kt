@@ -1,12 +1,14 @@
 package com.andrersguedes.pointit.presentation.room
 
-import com.andrersguedes.pointit.data.local.dao.EstimateDao
-import com.andrersguedes.pointit.data.local.entity.EstimateEntity
 import com.andrersguedes.pointit.data.repository.EstimateRepository
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -16,23 +18,27 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RoomViewModelTest {
 
+    @get:Rule
+    val mockkRule = MockKRule(this)
+
     private val testDispatcher = StandardTestDispatcher()
-    private val fakeDao = object : EstimateDao {
-        override fun getAllEstimates() = flowOf(emptyList<EstimateEntity>())
-        override suspend fun insertEstimate(estimate: EstimateEntity) {}
-        override suspend fun clearHistory() {}
-    }
-    private val repository = EstimateRepository(fakeDao)
+
+    @MockK
+    private lateinit var repository: EstimateRepository
     private lateinit var viewModel: RoomViewModel
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+
+        coEvery { repository.insertEstimate(any(), any(), any()) } returns Unit
+
         viewModel = RoomViewModel(repository)
     }
 
@@ -72,10 +78,19 @@ class RoomViewModelTest {
         viewModel.selectVote("5")
 
         viewModel.revealVotes()
+        advanceUntilIdle()
 
         val state = viewModel.uiState.value
         assertTrue(state.areVotesRevealed)
         assertEquals(5.2f, state.averageScore ?: 0f, 0.1f)
+
+        coVerify(exactly = 1) {
+            repository.insertEstimate(
+                taskTitle = "Task A",
+                userName = "André",
+                finalAverage = 5.2f
+            )
+        }
     }
 
     @Test
@@ -83,10 +98,19 @@ class RoomViewModelTest {
         viewModel.initSession(userName = "André", taskTitle = "Task A")
 
         viewModel.revealVotes()
+        advanceUntilIdle()
 
         val state = viewModel.uiState.value
         assertTrue(state.areVotesRevealed)
         assertEquals(5.25f, state.averageScore ?: 0f, 0.1f)
+
+        coVerify(exactly = 1) {
+            repository.insertEstimate(
+                taskTitle = "Task A",
+                userName = "André",
+                finalAverage = 5.25f
+            )
+        }
     }
 
     @Test
@@ -99,10 +123,15 @@ class RoomViewModelTest {
         viewModel.resetVoting()
 
         viewModel.revealVotes()
+        advanceUntilIdle()
 
         val state = viewModel.uiState.value
         assertTrue(state.areVotesRevealed)
         assertNull(state.averageScore)
+
+        coVerify(exactly = 0) {
+            repository.insertEstimate(any(), any(), any())
+        }
     }
 
     @Test
