@@ -74,12 +74,12 @@ fun RoomScreen(
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
-                    title = { Text(text = "Mesa de Votação") },
+                    title = { Text(text = stringResource(R.string.room_screen_text_table)) },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Voltar para Home"
+                                contentDescription = stringResource(R.string.room_screen_button_back)
                             )
                         }
                     },
@@ -136,12 +136,6 @@ fun RoomScreen(
                             .padding(Spacing.medium),
                         verticalArrangement = Arrangement.spacedBy(Spacing.small)
                     ) {
-                        Text(
-                            text = stringResource(R.string.room_screen_text_table),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-
                         state.participants.forEach { participant ->
                             ParticipantRow(
                                 participant = participant,

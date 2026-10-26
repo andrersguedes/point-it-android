@@ -25,12 +25,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
 import java.util.Date
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.andrersguedes.pointit.R
 import com.andrersguedes.pointit.presentation.theme.PointItTheme
+import com.andrersguedes.pointit.presentation.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,12 +45,12 @@ fun HistoryScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(text = "Histórico de Estimativas") },
+                title = { Text(text = stringResource(R.string.history_screen_text_history)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Voltar para Home"
+                            contentDescription = stringResource(R.string.history_screen_button_back)
                         )
                     }
                 },
@@ -57,7 +59,7 @@ fun HistoryScreen(
                         IconButton(onClick = onClearHistory) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
-                                contentDescription = "Limpar Histórico",
+                                contentDescription = stringResource(R.string.history_screen_button_clear_history),
                                 tint = MaterialTheme.colorScheme.error
                             )
                         }
@@ -74,7 +76,7 @@ fun HistoryScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Nenhuma estimativa salva ainda.",
+                    text = stringResource(R.string.history_screen_text_no_history),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -84,8 +86,8 @@ fun HistoryScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                    .padding(Spacing.medium),
+                verticalArrangement = Arrangement.spacedBy(Spacing.medium)
             ) {
                 items(state.estimates) { estimate ->
                     Card(
@@ -98,8 +100,8 @@ fun HistoryScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                                .padding(Spacing.medium),
+                            verticalArrangement = Arrangement.spacedBy(Spacing.small)
                         ) {
                             Text(
                                 text = estimate.taskTitle,
@@ -112,13 +114,13 @@ fun HistoryScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = "Média: %.1f".format(estimate.finalAverage),
+                                    text = stringResource(R.string.history_screen_text_average, estimate.finalAverage),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.primary,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
-                                    text = "Criador: ${estimate.userName}",
+                                    text = stringResource(R.string.history_screen_text_creator, estimate.userName),
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }
