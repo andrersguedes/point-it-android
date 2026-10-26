@@ -1,10 +1,13 @@
 package com.andrersguedes.pointit.presentation.room
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.andrersguedes.pointit.data.repository.EstimateRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 data class Participant(
     val id: String,
@@ -22,7 +25,9 @@ data class RoomUiState(
     val averageScore: Float? = null
 )
 
-class RoomViewModel : ViewModel() {
+class RoomViewModel(
+    private val repository: EstimateRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RoomUiState())
     val uiState: StateFlow<RoomUiState> = _uiState.asStateFlow()
@@ -63,16 +68,28 @@ class RoomViewModel : ViewModel() {
     }
 
     fun revealVotes() {
-        _uiState.update { currentState ->
-            val numericVotes = currentState.participants
-                .mapNotNull { it.selectedVote?.toIntOrNull() }
+        val currentState = _uiState.value
+        val numericVotes = currentState.participants
+            .mapNotNull { it.selectedVote?.toIntOrNull() }
 
-            val average = if (numericVotes.isNotEmpty()) numericVotes.average().toFloat() else null
+        val average = if (numericVotes.isNotEmpty()) numericVotes.average().toFloat() else null
 
-            currentState.copy(
+        _uiState.update {
+            it.copy(
                 areVotesRevealed = true,
                 averageScore = average
             )
+        }
+
+        // Persiste a estimativa no Room se houver uma média válida
+        if (average != null && currentState.taskTitle.isNotBlank()) {
+            viewModelScope.launch {
+                repository.insertEstimate(
+                    taskTitle = currentState.taskTitle,
+                    userName = currentState.userName,
+                    finalAverage = average
+                )
+            }
         }
     }
 
