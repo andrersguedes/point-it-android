@@ -8,7 +8,7 @@ appcompat = "1.8.0"
 material = "1.14.0"
 uiGraphics = "1.12.1"
 material3 = "1.4.0"
-kotlin = "2.4.21"
+kotlin = "2.1.20"
 coreSplashScreen = "1.2.0"
 compose = "1.13.0"
 lifecycleViewmodelKtx = "2.11.0"
@@ -22,6 +22,7 @@ uiTestJunit4 = "1.12.1"
 foundationLayout = "1.12.1"
 foundation = "1.12.1"
 roomKtx = "2.8.5"
+ksp = "2.1.20-1.0.31"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,8 +46,11 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomKtx" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomKtx" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

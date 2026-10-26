@@ -1,7 +1,11 @@
 package com.andrersguedes.pointit.presentation.room
 
+import com.andrersguedes.pointit.data.local.dao.EstimateDao
+import com.andrersguedes.pointit.data.local.entity.EstimateEntity
+import com.andrersguedes.pointit.data.repository.EstimateRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -18,12 +22,18 @@ import org.junit.Test
 class RoomViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
+    private val fakeDao = object : EstimateDao {
+        override fun getAllEstimates() = flowOf(emptyList<EstimateEntity>())
+        override suspend fun insertEstimate(estimate: EstimateEntity) {}
+        override suspend fun clearHistory() {}
+    }
+    private val repository = EstimateRepository(fakeDao)
     private lateinit var viewModel: RoomViewModel
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = RoomViewModel()
+        viewModel = RoomViewModel(repository)
     }
 
     @After

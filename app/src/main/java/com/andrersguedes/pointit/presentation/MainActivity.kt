@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -14,10 +15,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.andrersguedes.pointit.data.local.PointItDatabase
+import com.andrersguedes.pointit.data.repository.EstimateRepository
 import com.andrersguedes.pointit.presentation.home.HomeScreen
 import com.andrersguedes.pointit.presentation.home.HomeViewModel
 import com.andrersguedes.pointit.presentation.room.RoomScreen
 import com.andrersguedes.pointit.presentation.room.RoomViewModel
+import com.andrersguedes.pointit.presentation.room.RoomViewModelFactory
 import com.andrersguedes.pointit.presentation.theme.PointItTheme
 
 class MainActivity : ComponentActivity() {
@@ -69,10 +73,15 @@ class MainActivity : ComponentActivity() {
                             navArgument("taskTitle") { type = NavType.StringType }
                         )
                     ) { backStackEntry ->
+                        val context = LocalContext.current
+                        val database = PointItDatabase.getDatabase(context)
+                        val repository = EstimateRepository(database.estimateDao())
+                        val factory = RoomViewModelFactory(repository)
+
                         val userName = backStackEntry.arguments?.getString("userName") ?: ""
                         val taskTitle = backStackEntry.arguments?.getString("taskTitle") ?: ""
 
-                        val roomViewModel: RoomViewModel = viewModel()
+                        val roomViewModel: RoomViewModel = viewModel(factory = factory)
                         val state by roomViewModel.uiState.collectAsState()
 
                         // Inicializa a sessão assim que entra na tela
