@@ -2,6 +2,7 @@ package com.andrersguedes.pointit
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -87,6 +88,26 @@ class PointItEndToEndTest {
             // Validar que o resultado sumiu e o botão voltou ao estado normal
             onNodeWithText("Média de Estimativa: 7.0").assertDoesNotExist()
             onNodeWithText("Revelar Votos").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun roomScreenWhenClickOnBackButtonShouldReturnToHomeScreen() {
+        with(composeTestRule) {
+            // Preencher formulário e navegar para a RoomScreen
+            onNodeWithText("Seu Nome").performTextInput("André")
+            onNodeWithText("História / Task (Ex: [PROJ-102])").performTextInput("[PROJ-104] Teste Botao Voltar")
+            onNodeWithText("Criar Sala de Votação").performClick()
+
+            // Validar que estamos na RoomScreen
+            onNodeWithText("[PROJ-104] Teste Botao Voltar").assertIsDisplayed()
+
+            // Clicar no botão de voltar (ícone de seta na TopAppBar)
+            onNodeWithContentDescription("Voltar para Home").performClick()
+
+            // Validar que retornou para a HomeScreen verificando o título ou botão inicial
+            onNodeWithText("Point It").assertIsDisplayed()
+            onNodeWithText("Criar Sala de Votação").assertIsDisplayed()
         }
     }
 

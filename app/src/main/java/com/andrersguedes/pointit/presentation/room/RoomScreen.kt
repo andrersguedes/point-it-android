@@ -21,20 +21,27 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -46,6 +53,7 @@ import com.andrersguedes.pointit.presentation.theme.Spacing
 
 private val fibonacciCards = listOf("1", "2", "3", "5", "8", "13", "21", "?")
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomScreen(
     state: RoomUiState,
@@ -56,146 +64,176 @@ fun RoomScreen(
 ) {
     // Cria o estado de scroll
     val scrollState = rememberScrollState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .windowInsetsPadding(WindowInsets.systemBars),
         color = MaterialTheme.colorScheme.background
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.systemBars)
-                .verticalScroll(scrollState)
-                .padding(Spacing.large),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Cabeçalho da Task
+        Scaffold(
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = { Text(text = "Mesa de Votação") },
+                    navigationIcon = {
+                        IconButton(onClick = onBackClick) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Voltar para Home"
+                            )
+                        }
+                    },
+                    scrollBehavior = scrollBehavior
+                )
+            },
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        ) { paddingValues ->
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = state.taskTitle,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(Spacing.extraSmall))
-                Text(
-                    text = stringResource(
-                        R.string.room_screen_active_room_user_name, state.userName),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            Spacer(modifier = Modifier.height(Spacing.medium))
-
-            // Lista de Participantes e Votos
-            Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                shape = RoundedCornerShape(Spacing.medium),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                )
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .padding(paddingValues)
+                    .padding(horizontal = Spacing.large),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
+                // Cabeçalho da Task
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(Spacing.medium),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.small)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(R.string.room_screen_text_table),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    state.participants.forEach { participant ->
-                        ParticipantRow(
-                            participant = participant,
-                            areVotesRevealed = state.areVotesRevealed
-                        )
-                    }
-                }
-            }
-
-            if (state.areVotesRevealed && state.averageScore != null) {
-                Spacer(modifier = Modifier.height(Spacing.medium))
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(R.string.room_screen_text_average_score, state.averageScore),
-                        modifier = Modifier.padding(Spacing.medium),
-                        style = MaterialTheme.typography.bodyLarge,
+                        text = state.taskTitle,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Center
                     )
+                    Spacer(modifier = Modifier.height(Spacing.extraSmall))
+                    Text(
+                        text = stringResource(
+                            R.string.room_screen_active_room_user_name, state.userName
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
-            }
 
-            Spacer(modifier = Modifier.height(Spacing.medium))
+                Spacer(modifier = Modifier.height(Spacing.medium))
 
-            // Deck de Cartas de Fibonacci
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = stringResource(R.string.room_screen_text_choose_card),
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(modifier = Modifier.height(Spacing.small))
-
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(4),
-                    horizontalArrangement = Arrangement.spacedBy(Spacing.small),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.small),
-                    modifier = Modifier.height(100.dp)
+                // Lista de Participantes e Votos
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    shape = RoundedCornerShape(Spacing.medium),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                    )
                 ) {
-                    items(fibonacciCards) { cardValue ->
-                        FibonacciCardItem(
-                            value = cardValue,
-                            isSelected = state.currentSelectedVote == cardValue,
-                            onClick = { onVoteSelected(cardValue) }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(Spacing.medium),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.small)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.room_screen_text_table),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        state.participants.forEach { participant ->
+                            ParticipantRow(
+                                participant = participant,
+                                areVotesRevealed = state.areVotesRevealed
+                            )
+                        }
+                    }
+                }
+
+                if (state.areVotesRevealed && state.averageScore != null) {
+                    Spacer(modifier = Modifier.height(Spacing.medium))
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = stringResource(
+                                R.string.room_screen_text_average_score,
+                                state.averageScore
+                            ),
+                            modifier = Modifier.padding(Spacing.medium),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(Spacing.medium))
+                Spacer(modifier = Modifier.height(Spacing.medium))
 
-            // Botões de Ação (Revelar / Reiniciar)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Spacing.medium)
-            ) {
-                if (!state.areVotesRevealed) {
-                    Button(
-                        onClick = onRevealVotes,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(Spacing.xxl),
-                        shape = RoundedCornerShape(Spacing.medium)
+                // Deck de Cartas de Fibonacci
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = stringResource(R.string.room_screen_text_choose_card),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(modifier = Modifier.height(Spacing.small))
+
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(4),
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.small),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.small),
+                        modifier = Modifier.height(100.dp)
                     ) {
-                        Text(text = stringResource(R.string.room_screen_button_reveal_votes), fontWeight = FontWeight.Bold)
+                        items(fibonacciCards) { cardValue ->
+                            FibonacciCardItem(
+                                value = cardValue,
+                                isSelected = state.currentSelectedVote == cardValue,
+                                onClick = { onVoteSelected(cardValue) }
+                            )
+                        }
                     }
-                } else {
-                    Button(
-                        onClick = onResetVoting,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(Spacing.xxl),
-                        shape = RoundedCornerShape(Spacing.medium),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-                    ) {
-                        Text(text = stringResource(R.string.room_screen_button_reset_voting), fontWeight = FontWeight.Bold)
+                }
+
+                Spacer(modifier = Modifier.height(Spacing.medium))
+
+                // Botões de Ação (Revelar / Reiniciar)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.medium)
+                ) {
+                    if (!state.areVotesRevealed) {
+                        Button(
+                            onClick = onRevealVotes,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(Spacing.xxl),
+                            shape = RoundedCornerShape(Spacing.medium)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.room_screen_button_reveal_votes),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    } else {
+                        Button(
+                            onClick = onResetVoting,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(Spacing.xxl),
+                            shape = RoundedCornerShape(Spacing.medium),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.room_screen_button_reset_voting),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }
@@ -213,7 +251,10 @@ fun ParticipantRow(participant: Participant, areVotesRevealed: Boolean) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.small)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Spacing.small)
+        ) {
             Icon(
                 imageVector = if (participant.hasVoted) Icons.Default.CheckCircle else Icons.Default.HourglassEmpty,
                 contentDescription = null,
@@ -239,8 +280,10 @@ fun ParticipantRow(participant: Participant, areVotesRevealed: Boolean) {
 
 @Composable
 fun FibonacciCardItem(value: String, isSelected: Boolean, onClick: () -> Unit) {
-    val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
-    val contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+    val backgroundColor =
+        if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+    val contentColor =
+        if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
 
     Surface(
         modifier = Modifier
@@ -266,7 +309,11 @@ fun FibonacciCardItem(value: String, isSelected: Boolean, onClick: () -> Unit) {
 }
 
 @Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark Mode",
+    showBackground = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun RoomScreenPreview() {
     PointItTheme {
