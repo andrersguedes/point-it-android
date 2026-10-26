@@ -17,6 +17,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.andrersguedes.pointit.data.local.PointItDatabase
 import com.andrersguedes.pointit.data.repository.EstimateRepository
+import com.andrersguedes.pointit.presentation.history.HistoryScreen
+import com.andrersguedes.pointit.presentation.history.HistoryViewModel
+import com.andrersguedes.pointit.presentation.history.HistoryViewModelFactory
 import com.andrersguedes.pointit.presentation.home.HomeScreen
 import com.andrersguedes.pointit.presentation.home.HomeViewModel
 import com.andrersguedes.pointit.presentation.room.RoomScreen
@@ -102,7 +105,22 @@ class MainActivity : ComponentActivity() {
 
                     // Rota 3: Histórico de Estimativas
                     composable("history_screen") {
-                        // Conteúdo da tela de histórico
+                        val context = LocalContext.current
+                        val database = PointItDatabase.getDatabase(context)
+                        val repository = EstimateRepository(database.estimateDao())
+                        val factory = HistoryViewModelFactory(repository)
+
+                        val historyViewModel: HistoryViewModel = viewModel(factory = factory)
+                        val state by historyViewModel.uiState.collectAsState()
+
+                        HistoryScreen(
+                            state = state,
+                            onClearHistory = historyViewModel::clearHistory,
+                            onBackClick = { navController.popBackStack() },
+                            onItemClick = { estimateId ->
+                                // Aqui entra a navegação para a Tela 4 de Detalhes futuramente!
+                            }
+                        )
                     }
                 }
             }
