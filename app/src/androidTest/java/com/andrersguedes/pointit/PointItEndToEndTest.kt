@@ -2,6 +2,8 @@ package com.andrersguedes.pointit
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -108,6 +110,34 @@ class PointItEndToEndTest {
             // Validar que retornou para a HomeScreen verificando o título ou botão inicial
             onNodeWithText("Point It").assertIsDisplayed()
             onNodeWithText("Criar Sala de Votação").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun historyScreenShouldShowHistoryWhenCompleteFlow() {
+        with(composeTestRule) {
+            // 1. Criar sala na Home
+            onNodeWithText("Seu Nome").performTextInput("André")
+            onNodeWithText("História / Task (Ex: [PROJ-102])").performTextInput("[PROJ-999] Teste E2E History")
+            onNodeWithText("Criar Sala de Votação").performClick()
+
+            // 2. Votar e Revelar na Room
+            onNodeWithText("8").performClick()
+            onNodeWithText("Revelar Votos").performClick()
+
+            // 3. Voltar para a Home
+            onNodeWithContentDescription("Voltar para Home").performClick()
+
+            // 4. Ir para a tela de Histórico
+            onNodeWithText("Ver Histórico de Estimativas").performClick()
+
+            // 5. Validar que a task votada foi salva no banco Room e exibida na tela
+            onNodeWithText("[PROJ-999] Teste E2E History").assertIsDisplayed()
+            onAllNodesWithText("Média: 5.8").onFirst().assertIsDisplayed()
+
+            // 6. Limpar o histórico e validar o estado vazio
+            onNodeWithContentDescription("Limpar Histórico").performClick()
+            onNodeWithText("Nenhuma estimativa salva ainda.").assertIsDisplayed()
         }
     }
 
