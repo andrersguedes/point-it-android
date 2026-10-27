@@ -116,28 +116,59 @@ class PointItEndToEndTest {
     @Test
     fun historyScreenShouldShowHistoryWhenCompleteFlow() {
         with(composeTestRule) {
-            // 1. Criar sala na Home
+            // Criar sala na Home
             onNodeWithText("Seu Nome").performTextInput("André")
             onNodeWithText("História / Task (Ex: [PROJ-102])").performTextInput("[PROJ-999] Teste E2E History")
             onNodeWithText("Criar Sala de Votação").performClick()
 
-            // 2. Votar e Revelar na Room
+            // Votar e Revelar na Room
             onNodeWithText("8").performClick()
             onNodeWithText("Revelar Votos").performClick()
 
-            // 3. Voltar para a Home
+            // Voltar para a Home
             onNodeWithContentDescription("Voltar para Home").performClick()
 
-            // 4. Ir para a tela de Histórico
+            // Ir para a tela de Histórico
             onNodeWithText("Ver Histórico de Estimativas").performClick()
 
-            // 5. Validar que a task votada foi salva no banco Room e exibida na tela
+            // Validar que a task votada foi salva no banco Room e exibida na tela
             onNodeWithText("[PROJ-999] Teste E2E History").assertIsDisplayed()
             onAllNodesWithText("Média: 5.8").onFirst().assertIsDisplayed()
 
-            // 6. Limpar o histórico e validar o estado vazio
+            // Limpar o histórico e validar o estado vazio
             onNodeWithContentDescription("Limpar Histórico").performClick()
             onNodeWithText("Nenhuma estimativa salva ainda.").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun estimateDetailScreenShouldShowTaskInformation() {
+        with(composeTestRule) {
+            // Criar sala e votar para gerar um registro no Room
+            onNodeWithText("Seu Nome").performTextInput("André")
+            onNodeWithText("História / Task (Ex: [PROJ-102])").performTextInput("[PROJ-888] E2E Detalhes Task")
+            onNodeWithText("Criar Sala de Votação").performClick()
+
+            onNodeWithText("5").performClick()
+            onNodeWithText("Revelar Votos").performClick()
+            onNodeWithContentDescription("Voltar para Home").performClick()
+
+            // Entrar no Histórico
+            onNodeWithText("Ver Histórico de Estimativas").performClick()
+            onNodeWithText("[PROJ-888] E2E Detalhes Task").assertIsDisplayed()
+
+            // Clicar no card do histórico para abrir a Tela 4 (Detalhes)
+            onNodeWithText("[PROJ-888] E2E Detalhes Task").performClick()
+
+            // Validar que estamos na tela de detalhes com os dados corretos
+            onNodeWithText("Detalhes da Estimativa").assertIsDisplayed()
+            onNodeWithText("[PROJ-888] E2E Detalhes Task").assertIsDisplayed()
+            onAllNodesWithText("5.2").onFirst().assertIsDisplayed()
+            onNodeWithText("André").assertIsDisplayed()
+
+            // Testar o botão de voltar da tela de detalhes
+            onNodeWithContentDescription("Voltar").performClick()
+            onNodeWithText("Histórico de Estimativas").assertIsDisplayed()
         }
     }
 
