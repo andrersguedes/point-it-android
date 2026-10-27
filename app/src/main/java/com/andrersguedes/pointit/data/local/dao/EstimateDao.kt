@@ -19,4 +19,7 @@ interface EstimateDao {
     @Query("DELETE FROM estimate_history")
     suspend fun clearHistory()
 
+    @Query("SELECT * FROM estimate_history WHERE id = :estimateId")
+    suspend fun getEstimateById(estimateId: Long): EstimateEntity?
+
 }

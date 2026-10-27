@@ -18,4 +18,6 @@ class EstimateRepository(private val estimateDao: EstimateDao) {
 
     suspend fun clearHistory() = estimateDao.clearHistory()
 
+    suspend fun getEstimateById(id: Long) = estimateDao.getEstimateById(id)
+
 }

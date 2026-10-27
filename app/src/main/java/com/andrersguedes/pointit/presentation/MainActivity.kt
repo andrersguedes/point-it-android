@@ -17,6 +17,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.andrersguedes.pointit.data.local.PointItDatabase
 import com.andrersguedes.pointit.data.repository.EstimateRepository
+import com.andrersguedes.pointit.presentation.detail.EstimateDetailScreen
+import com.andrersguedes.pointit.presentation.detail.EstimateDetailViewModel
+import com.andrersguedes.pointit.presentation.detail.EstimateDetailViewModelFactory
 import com.andrersguedes.pointit.presentation.history.HistoryScreen
 import com.andrersguedes.pointit.presentation.history.HistoryViewModel
 import com.andrersguedes.pointit.presentation.history.HistoryViewModelFactory
@@ -118,8 +121,26 @@ class MainActivity : ComponentActivity() {
                             onClearHistory = historyViewModel::clearHistory,
                             onBackClick = { navController.popBackStack() },
                             onItemClick = { estimateId ->
-                                // Aqui entra a navegação para a Tela 4 de Detalhes futuramente!
+                                navController.navigate("detail/$estimateId")
                             }
+                        )
+                    }
+
+                    // Rota 4: Detalhes da Estimativa
+                    composable("detail/{estimateId}") { backStackEntry ->
+                        val estimateId = backStackEntry.arguments?.getString("estimateId")?.toLongOrNull() ?: 0L
+
+                        val context = LocalContext.current
+                        val database = PointItDatabase.getDatabase(context)
+                        val repository = EstimateRepository(database.estimateDao())
+                        val factory = EstimateDetailViewModelFactory(repository, estimateId)
+
+                        val detailViewModel: EstimateDetailViewModel = viewModel(factory = factory)
+                        val state by detailViewModel.uiState.collectAsState()
+
+                        EstimateDetailScreen(
+                            state = state,
+                            onBackClick = { navController.popBackStack() }
                         )
                     }
                 }
