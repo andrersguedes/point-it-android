@@ -23,13 +23,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
 import java.util.Date
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.andrersguedes.pointit.R
 import com.andrersguedes.pointit.presentation.theme.PointItTheme
+import com.andrersguedes.pointit.presentation.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,12 +42,12 @@ fun EstimateDetailScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(text = "Detalhes da Estimativa") },
+                title = { Text(text = stringResource(R.string.estimate_detail_text_details)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Voltar"
+                            contentDescription = stringResource(R.string.estimate_detail_button_back)
                         )
                     }
                 }
@@ -59,7 +61,7 @@ fun EstimateDetailScreen(
                     .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "Carregando detalhes...")
+                Text(text = stringResource(R.string.estimate_detail_text_loading))
             }
         } else if (state.estimate == null) {
             Box(
@@ -68,7 +70,7 @@ fun EstimateDetailScreen(
                     .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "Estimativa não encontrada.")
+                Text(text = stringResource(R.string.estimate_detail_text_not_found))
             }
         } else {
             val estimate = state.estimate
@@ -79,8 +81,8 @@ fun EstimateDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .padding(Spacing.medium),
+                verticalArrangement = Arrangement.spacedBy(Spacing.medium)
             ) {
                 // Card Principal de Resumo
                 Card(
@@ -92,11 +94,11 @@ fun EstimateDetailScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                            .padding(Spacing.medium),
+                        verticalArrangement = Arrangement.spacedBy(Spacing.small)
                     ) {
                         Text(
-                            text = "História / Task",
+                            text = stringResource(R.string.estimate_detail_text_history_task),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -106,14 +108,14 @@ fun EstimateDetailScreen(
                             fontWeight = FontWeight.Bold
                         )
 
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(Spacing.extraSmall))
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column {
-                                Text(text = "Média Final", style = MaterialTheme.typography.labelMedium)
+                                Text(text = stringResource(R.string.estimate_detail_text_final_average), style = MaterialTheme.typography.labelMedium)
                                 Text(
                                     text = "%.1f".format(estimate.finalAverage),
                                     style = MaterialTheme.typography.headlineSmall,
@@ -122,7 +124,7 @@ fun EstimateDetailScreen(
                                 )
                             }
                             Column(horizontalAlignment = Alignment.End) {
-                                Text(text = "Moderador", style = MaterialTheme.typography.labelMedium)
+                                Text(text = stringResource(R.string.estimate_detail_text_moderator), style = MaterialTheme.typography.labelMedium)
                                 Text(
                                     text = estimate.userName,
                                     style = MaterialTheme.typography.bodyLarge,
@@ -131,9 +133,9 @@ fun EstimateDetailScreen(
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(Spacing.extraSmall))
                         Text(
-                            text = "Data da conclusão: $formattedDate",
+                            text = stringResource(R.string.estimate_detail_text_conclusion, formattedDate),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

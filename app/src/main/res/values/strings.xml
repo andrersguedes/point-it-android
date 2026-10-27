@@ -24,4 +24,13 @@
     <string name="history_screen_text_no_history">Nenhuma estimativa salva ainda.</string>
     <string name="history_screen_text_average">Média: %.1f</string>
     <string name="history_screen_text_creator">Criador: %s</string>
+
+    <string name="estimate_detail_button_back">Voltar</string>
+    <string name="estimate_detail_text_details">Detalhes da Estimativa</string>
+    <string name="estimate_detail_text_loading">Carregando detalhes…</string>
+    <string name="estimate_detail_text_not_found">Estimativa não encontrada.</string>
+    <string name="estimate_detail_text_history_task">História / Task</string>
+    <string name="estimate_detail_text_final_average">Média Final</string>
+    <string name="estimate_detail_text_moderator">Moderador</string>
+    <string name="estimate_detail_text_conclusion">Data da conclusão: %s</string>
 </resources>

@@ -29,7 +29,7 @@ class EstimateDetailScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText("Carregando detalhes...").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Carregando detalhes…").assertIsDisplayed()
     }
 
     @Test
