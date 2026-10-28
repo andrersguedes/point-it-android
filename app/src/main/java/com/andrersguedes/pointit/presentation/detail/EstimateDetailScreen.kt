@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,8 +24,7 @@ import com.andrersguedes.pointit.R
 import com.andrersguedes.pointit.presentation.components.PointItTopBar
 import com.andrersguedes.pointit.presentation.theme.PointItTheme
 import com.andrersguedes.pointit.presentation.theme.Spacing
-import java.text.SimpleDateFormat
-import java.util.Date
+import com.andrersguedes.pointit.util.toFormattedDateTime
 
 @Composable
 fun EstimateDetailScreen(
@@ -61,8 +59,7 @@ fun EstimateDetailScreen(
             }
         } else {
             val estimate = state.estimate
-            val formattedDate = SimpleDateFormat("dd/MM/yyyy HH:mm", LocalLocale.current.platformLocale)
-                .format(Date(estimate.timestamp))
+            val formattedDate = estimate.timestamp.toFormattedDateTime()
 
             Column(
                 modifier = Modifier
