@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -79,9 +81,7 @@ class MainActivity : ComponentActivity() {
                             navArgument("taskTitle") { type = NavType.StringType }
                         )
                     ) { backStackEntry ->
-                        val context = LocalContext.current
-                        val database = PointItDatabase.getDatabase(context)
-                        val repository = EstimateRepository(database.estimateDao())
+                        val repository = rememberEstimateRepository()
                         val factory = RoomViewModelFactory(repository)
 
                         val userName = backStackEntry.arguments?.getString("userName") ?: ""
@@ -108,9 +108,7 @@ class MainActivity : ComponentActivity() {
 
                     // Rota 3: Histórico de Estimativas
                     composable("history_screen") {
-                        val context = LocalContext.current
-                        val database = PointItDatabase.getDatabase(context)
-                        val repository = EstimateRepository(database.estimateDao())
+                        val repository = rememberEstimateRepository()
                         val factory = HistoryViewModelFactory(repository)
 
                         val historyViewModel: HistoryViewModel = viewModel(factory = factory)
@@ -130,9 +128,7 @@ class MainActivity : ComponentActivity() {
                     composable("detail/{estimateId}") { backStackEntry ->
                         val estimateId = backStackEntry.arguments?.getString("estimateId")?.toLongOrNull() ?: 0L
 
-                        val context = LocalContext.current
-                        val database = PointItDatabase.getDatabase(context)
-                        val repository = EstimateRepository(database.estimateDao())
+                        val repository = rememberEstimateRepository()
                         val factory = EstimateDetailViewModelFactory(repository, estimateId)
 
                         val detailViewModel: EstimateDetailViewModel = viewModel(factory = factory)
@@ -148,4 +144,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+}
+
+@Composable
+fun rememberEstimateRepository(): EstimateRepository {
+    val context = LocalContext.current
+    return remember {
+        val database = PointItDatabase.getDatabase(context)
+        EstimateRepository(database.estimateDao())
+    }
 }
