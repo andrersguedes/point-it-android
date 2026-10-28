@@ -9,7 +9,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.andrersguedes.pointit.presentation.MainActivity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -105,7 +104,7 @@ class PointItEndToEndTest {
             onNodeWithText("[PROJ-104] Teste Botao Voltar").assertIsDisplayed()
 
             // Clicar no botão de voltar (ícone de seta na TopAppBar)
-            onNodeWithContentDescription("Voltar para Home").performClick()
+            onNodeWithContentDescription("Voltar").performClick()
 
             // Validar que retornou para a HomeScreen verificando o título ou botão inicial
             onNodeWithText("Point It").assertIsDisplayed()
@@ -126,7 +125,7 @@ class PointItEndToEndTest {
             onNodeWithText("Revelar Votos").performClick()
 
             // Voltar para a Home
-            onNodeWithContentDescription("Voltar para Home").performClick()
+            onNodeWithContentDescription("Voltar").performClick()
 
             // Ir para a tela de Histórico
             onNodeWithText("Ver Histórico de Estimativas").performClick()
@@ -151,7 +150,7 @@ class PointItEndToEndTest {
 
             onNodeWithText("5").performClick()
             onNodeWithText("Revelar Votos").performClick()
-            onNodeWithContentDescription("Voltar para Home").performClick()
+            onNodeWithContentDescription("Voltar").performClick()
 
             // Entrar no Histórico
             onNodeWithText("Ver Histórico de Estimativas").performClick()

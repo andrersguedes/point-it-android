@@ -1,4 +1,4 @@
-package com.andrersguedes.pointit.presentation
+package com.andrersguedes.pointit
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
