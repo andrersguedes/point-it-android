@@ -38,6 +38,14 @@ The project follows modern Android development best practices without relying on
 
 ---
 
+## 📱 Capturas de Tela
+
+| Home & Setup | Voting Room | Reveal Votes | History | Estimate Details |
+| :---: | :---: |:---------------------------------------------------------:|:-----------------------------------------------------:|:------:| 
+| <img src="docs/screenshots/home.png" width="200" /> | <img src="docs/screenshots/room.png" width="200" /> | <img src="docs/screenshots/room_voted.png" width="200" /> | <img src="docs/screenshots/history.png" width="200" /> | <img src="docs/screenshots/detail.png" width="200" /> |
+
+---
+
 ## 📂 Project Structure
 
 ```text
